@@ -151,6 +151,13 @@ fi
 logit "Starting zLinux "
 $SUDO chown root:root herc4x/bin/hercifc
 $SUDO chmod +s herc4x/bin/hercifc
+
+# While hercifc needs to be setuid in our experience, Hercules itself also
+# needs some capabilities, but setcap seems to work here instead of needing
+# to run it as root or setuid.
+$SUDO setcap cap_sys_nice+ep herc4x/bin/hercules
+$SUDO setcap cap_net_admin+ep herc4x/bin/hercules
+
 echo "${bold}${uline}${yellow}Starting zLinux now....${reset}"
 sleep 1.2
 

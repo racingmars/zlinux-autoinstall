@@ -287,12 +287,19 @@ $SUDO chown $(id -u):$(id -g) ./logs/setnetwork.log*
 # copy the as-installed copy, which is owned by the user and not root, so that
 # we can restore the original owner and permissions after Hercules is done.
 # But we won't overwrite an existing backup, in case previous runs failed and
-# we're starting again
+# we're starting again. We use setuid because we have found using just setcap
+# on hercifc isn't reliable on all systems.
 if [[ ! -f herc4x/bin/hercifc.orig ]]; then
     cp herc4x/bin/hercifc herc4x/bin/hercifc.orig
 fi
 $SUDO chown root:root herc4x/bin/hercifc
 $SUDO chmod +s herc4x/bin/hercifc
+
+# While hercifc needs to be setuid in our experience, Hercules itself also
+# needs some capabilities, but setcap seems to work here instead of needing
+# to run it as root or setuid.
+$SUDO setcap cap_sys_nice+ep herc4x/bin/hercules
+$SUDO setcap cap_net_admin+ep herc4x/bin/hercules
 
 # copy correct .rc file for installation
 cp templates/hercules.rc.DVD hercules.rc
@@ -303,7 +310,7 @@ read -p "${white}Please press ENTER to continue with install now. ${reset}" pres
 # just giving user a chance to see
 logdate=`date "+%F-%T"`
 FILE=./logs/hercules.log.$logdate
-$SUDO HERCULES_RC=hercules.rc hercules -f hercules.cnf > "$FILE"
+HERCULES_RC=hercules.rc hercules -f hercules.cnf > "$FILE"
 
 logit "finished hercules run"
 # After hercules finishes, restore the original hercifc
