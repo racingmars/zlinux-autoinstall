@@ -113,11 +113,11 @@ at <a href="http://brew.sh/">http://brew.sh/</a>
 <br />
 <br />
 
-<li>Proceed with <i>Building from source - Linux and macOS</i> below.<br /><br />
+<li>Proceed with <i>Building from source - Linux and MacOS</i> below.<br /><br />
 </ol>
 
 <a name="instnixmac"></a>
-<h3>Building from source - Linux and macOS (High Sierra and newer)</h3>
+<h3>Building from source - Linux and MacOS (High Sierra and newer)</h3>
 
 <p>
 <em><b>Important: Please read everything before doing anything.  Don't be bashful about asking for help. </b></em>
@@ -168,19 +168,11 @@ with every new release, which contains important late-breaking information about
         sudo apt-get -y install libregina3-dev
     </code>
 
-    <li>Elbrus Linux (similar to Debian)
-    <p><code>
-        sudo apt-get -y install git wget time<br>
-        sudo apt-get -y install build-essential cmake flex gawk m4 autoconf automake libtool<br>
-        sudo apt-get -y install bzip2 zlib<br>
-        sudo apt-get -y install libcap
-    </code>
-
     <li>Arch / Manjaro
     <p><code>
-        sudo pacman -S --needed --noconfirm git wget<br>
-        sudo pacman -S --needed --noconfirm base-devel make cmake flex gawk m4 autoconf automake<br>
-        sudo pacman -S --needed --noconfirm bzip2 zlib
+        sudo apt-get -y install git wget<br>
+        sudo apt-get -y install base-devel make cmake flex gawk m4 autoconf automake<br>
+        sudo apt-get -y install bzip2 zlib
     </code>
 
     <li>Fedora
@@ -190,22 +182,11 @@ with every new release, which contains important late-breaking information about
         sudo dnf -y install bzip2-devel zlib-devel
     </code>
 
-    <li>CentOS / AlmaLinux / Rocky Linux 8+ / Red Hat RHEL 9
+    <li>AlmaLinux / CentOS 8
     <p><code>
-        sudo yum -y install git wget time<br>
+        sudo yum -y install git wget<br>
         sudo yum -y install gcc make cmake flex gawk m4 autoconf automake libtool-ltdl-devel<br>
         sudo yum -y install bzip2-devel zlib-devel
-    </code>
-    <p>
-    <p><i>Note: On CentOS 9, the following command is required <b>before</b> installing the packages:</i>
-    <p><code>
-        sudo yum config-manager --set-enabled crb
-    </code>
-    <p>
-    <p><i>Note: On Red Hat RHEL 9, the following command is required <b>before</b> installing the packages:</i>
-    <br>(refer <a href="https://www.redhat.com/sysadmin/install-epel-linux">here</a> for more information)
-    <p><code>
-        sudo subscription-manager repos --enable codeready-builder-for-rhel-9-$(arch)-rpms
     </code>
 
     <li>CentOS 7
@@ -215,9 +196,9 @@ with every new release, which contains important late-breaking information about
         sudo yum -y install bzip2-devel zlib-devel
     </code>
 
-    <p><i>Note: On CentOS 7, there is no package for CMAKE 3.x, it must be built from source.</i>
+    <p><i>Note: On CentOS 7, there is no package for CMAKE 3.x, must be built from source.</i>
 
-    <li>openSUSE (15.1+)
+    <li>openSUSE (15.1)
     <p><code>
     sudo zypper install -y git<br>
     sudo zypper install -y -t pattern devel_basis autoconf automake cmake flex gawk m4 libtool<br>
@@ -225,7 +206,7 @@ with every new release, which contains important late-breaking information about
     sudo zypper install -y libcap-progs
     </code>
 
-    <li>Apple Darwin (macOS High Sierra, Mojave, Catalina, Big Sur, etc.) with Homebrew
+    <li>Apple Darwin (MacOS High Sierra, Mojave, Catalina, Big Sur) with Homebrew
     <p><code>
         xcode-select --install<br>
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"<br>
@@ -235,20 +216,8 @@ with every new release, which contains important late-breaking information about
         <!-- ( flex gawk m4 bzip2 zlib ) -->
     </code>
 
-    <p><i>Note: So configure/make will find ltdl.h and libltdl:</i>
-    <p><code>
-        export CFLAGS="$CFLAGS -I$(find $(brew --cellar libtool) -type d -name "include" | sort -n | tail -n 1)"<br>
-        export LDFLAGS="$LDFLAGS -L$(find $(brew --cellar libtool) -type d -name "lib" | sort -n | tail -n 1)"
-    </code>
-
-    <p><i>And include these options to configure:</i>
-    <p><code>
-        --disable-getoptwrapper<br>
-        --without-included-ltdl
-    </code>
-
-    <li>Apple Darwin (macOS Big Sur) with MacPorts
-        <p>Information on installing MacPorts may be found
+    <li>Apple Darwin (MacOS Big Sur) with MacPorts
+        <p>Information on installing MacPorts may be found 
         <a href="https://guide.macports.org/chunked/installing.macports.html">here</a>.
     <p><code>
         sudo port install wget gsed<br>
@@ -273,10 +242,6 @@ with every new release, which contains important late-breaking information about
     <p><code>
         export CFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib
     </code>
-
-    <li>OpenBSD is not currently supported
-    <p>
-
   </ul>
 
 <li>Verify you have all of the correct versions of the more important packages installed:
@@ -341,14 +306,13 @@ document.
     <p>
     By default, the configure script will attempt to guess appropriate
     compiler optimization flags for your system.  If its guesses
-    turn out to be wrong, you can either specify your own optimization
-    flags with <code><nobr>--enable-optimization=FLAGS</nobr></code>
-    (<i>preferred</i>) or else as a last resort disable all optimization
-    by passing the <code><nobr>--disable-optimization</nobr></code> option
-    instead (<i><b>not</b> recommended</i>). For additional configuration
+    turn out to be wrong, you can disable all optimization by
+    passing the <code><nobr>--disable-optimization</nobr></code> option to
+    configure, or specify your own optimization flags with
+    <code><nobr>--enable-optimization=FLAGS</nobr></code>. For additional configuration
     options, run: <code>./configure <nobr>--help=short</nobr></code>.
 
-    <p>For Apple macOS, these additional configure switches are recommended:
+    <p>For Apple MacOS, these additional configure switches are recommended:
     <p><code>
         --disable-getoptwrapper<br>
         --without-included-ltdl
@@ -468,13 +432,8 @@ where:
 
             is the name of the configuration file.
             The default, if none is specified, is <b><em>hercules.cnf</em></b>.
-            The default may be overridden via the "<code>HERCULES_CNF</code>"
-            environment variable. If the value "<b>none</b>" is specified as the
-            name of the configuration file, then Hercules is started without a
-            configuration file using internal default values and no devices.
-            Alternatively, specifying the filename as "<code>NUL</code>" on
-            Windows or "<code>/dev/null</code>" on Linux means the same thing
-            as specifying "<b>none</b>".
+            The default may be overridden via the <code>HERCULES_CNF</code>
+            environment variable.
         <p>
         <dt><code><em>logfile</em></code><p><dd>
 
@@ -486,13 +445,8 @@ where:
         <p>
         <dt><code><em>rcfile</em></code><p><dd>
 
-            is the name of the Hercules <a href="#RCFILE">.rc run commands file</a>.
-            The run commands file automatically executes panel commands upon
-            startup. If not specified, the value of the "<code>HERCULES_RC</code>"
-            environment variable is used. If no environment variable is defined,
-            the default value "hercules.rc" is used. If the default "hercules.rc"
-            file is not found, then the value "<b>none</b>" is used, indicating
-            an .rc file will not be used.
+            is the name of the Hercules <a href="#RCFILE">.RC run commands file</a>.
+            The run commands file automatically executes panel commands upon startup.
         <p>
         <dt><code><em>logofile</em></code><p><dd>
 
@@ -947,7 +901,7 @@ At present, this feature is activated on the Windows platform only:
 <a name="commands">
 <h4>Panel commands</h4>
 <p>
-The following is what is displayed on the Hercules hardware console (HMC)
+The following is what is displayed on the Hercules harware console (HMC)
 in response to the '?' command being entered. Please note that it may not
 be completely accurate or up-to-date. Enter the '?' command for
 yourself for a more complete, accurate and up-to-date list of supported
@@ -1148,7 +1102,7 @@ panel commands:
      tt32                 *Control/query CTCI-WIN functionality
      txf                  *Transactional-Execution Facility tracing
      tzoffset              Set tzoffset parameter
-     t{+/-}CKD [devnum]    Turn CKD Search Key tracing on/off
+     t{+/-}CKD             Turn CKD_KEY tracing on/off
      t{+/-}dev             Turn CCW tracing on/off
      u                    *Disassemble storage
      uptime                Display how long Hercules has been running
