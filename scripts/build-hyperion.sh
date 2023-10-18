@@ -31,13 +31,14 @@ SUDO="sudo"
 
 $SUDO apt-get update -y
 $SUDO apt-get install -y zlib1g-dev build-essential git \
-	libltdl-dev libbz2-dev
+	libltdl-dev
 
 git clone https://github.com/SDL-Hercules-390/hyperion.git \
 	sdl-hyperion-git
 mkdir sdl-hyperion-build
 cd sdl-hyperion-build
 ../sdl-hyperion-git/configure --prefix=/tmp/herc4x \
+	--disable-cckd-bzip2 --disable-het-bzip2 \
 	CFLAGS="-m64 -march=x86-64 -mtune=generic -O1" \
 	LDFLAGS="-Wl,-rpath=./herc4x/lib,-rpath=./herc4x/lib/hercules" \
 	LT_SYS_LIBRARY_PATH=./herc4x/lib:./herc4x/lib/hercules
