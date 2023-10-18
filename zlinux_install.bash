@@ -43,6 +43,14 @@ source ./Version
 SUDO="sudo -E"
 export SUDO
 
+check_xxd () {
+    if ! command -v xxd >/dev/null 2>/dev/null; then
+        echo "The xxd utility must be installed."
+        echo "Please install it (e.g. apt install xxd) and try again."
+        exit 1
+    fi
+}
+
 test_sudo () {
 #    echo "${yellow}Testing if '$SUDO' command works ${reset}"
     if [[ $($SUDO id -u) -ne 0 ]]; then
@@ -186,6 +194,7 @@ logit "user invoking install script: $(whoami)"
 
 check_already_installed
 
+check_xxd
 test_sudo     # but we must have sudo capability
 
 # quick sanity checks
