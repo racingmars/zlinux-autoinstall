@@ -7,3 +7,5 @@ install_success
 install/
 hercules.rc
 hercules.cnf
+herc4x/bin/hercifc.orig
+
