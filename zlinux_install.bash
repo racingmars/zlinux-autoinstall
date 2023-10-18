@@ -51,6 +51,16 @@ check_xxd () {
     fi
 }
 
+check_iptables () {
+    # iptables might not be in non-root users' paths, so we won't check
+    # with command -v; we'll just check the likely file locations
+    if ! ([ -x /usr/bin/iptables ] || [ -x /usr/sbin/iptables ]); then
+        echo "iptables must be installed."
+        echo "Please install it (e.g. apt install iptables) and try again."
+        exit 1
+    fi
+}
+
 test_sudo () {
 #    echo "${yellow}Testing if '$SUDO' command works ${reset}"
     if [[ $($SUDO id -u) -ne 0 ]]; then
@@ -195,6 +205,7 @@ logit "user invoking install script: $(whoami)"
 check_already_installed
 
 check_xxd
+check_iptables
 test_sudo     # but we must have sudo capability
 
 # quick sanity checks
