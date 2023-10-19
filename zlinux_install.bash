@@ -100,6 +100,16 @@ set_colors() {
 }
 
 check_os () {
+    # Not all systems define $OSTYPE, so we will first do a quick
+    # check to see if we are for sure on Linux.
+    os=$(uname -o)
+    if [[ "$os" == "GNU/Linux" ]]; then
+        return
+    fi
+
+    # If that didn't pass, we'll fall back on $OSTYPE to provide a
+    # potentially more OS-specific error message, or perhaps detect
+    # Linux as linux-gnu.
     if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         echo
     elif [[ "$OSTYPE" == "darwin"* ]]; then
